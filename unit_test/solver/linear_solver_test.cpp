@@ -47,8 +47,8 @@ struct NoBlockOrdering {
 };
 
 /**
- * Type parameterized class for a fixture to setup a linear solver along with
- * some data of a linear system to be solved.
+ * Type parameterized class for a fixture to setup a linear solver along with some data of a linear
+ * system to be solved.
  */
 template <typename T>
 class LS : public testing::Test {
@@ -56,13 +56,11 @@ class LS : public testing::Test {
   using LinearSolverType = typename T::first_type;
   using OrderingType = typename T::second_type;
 
-  LS() : linearsolver(g2o::make_unique<LinearSolverType>()) {
-    g2o::internal::fillTestMatrix(sparse_matrix);
-  }
+  LS() : linearsolver(g2o::make_unique<LinearSolverType>()) {}
 
  protected:
   std::unique_ptr<LinearSolverType> linearsolver;
-  g2o::SparseBlockMatrixX sparse_matrix;
+  g2o::SparseBlockMatrixX sparse_matrix = g2o::internal::createTestMatrix();
   g2o::MatrixX matrix_inverse = g2o::internal::createTestMatrixInverse();
   g2o::VectorX x_vector = g2o::internal::createTestVectorX();
   g2o::VectorX b_vector = g2o::internal::createTestVectorB();
@@ -75,8 +73,7 @@ TYPED_TEST_P(LS, Solve) {
   g2o::VectorX solver_solution;
   for (int solve_iter = 0; solve_iter < 2; ++solve_iter) {
     solver_solution.setZero(this->b_vector.size());
-    this->linearsolver->solve(this->sparse_matrix, solver_solution.data(),
-                              this->b_vector.data());
+    this->linearsolver->solve(this->sparse_matrix, solver_solution.data(), this->b_vector.data());
 
     ASSERT_TRUE(solver_solution.isApprox(this->x_vector, 1e-6))
         << "Solution differs on iteration " << solve_iter;
@@ -88,15 +85,12 @@ TYPED_TEST_P(LS, SolvePattern) {
 
   g2o::SparseBlockMatrixX spinv;
   std::vector<std::pair<int, int> > blockIndices;
-  for (int i = 0;
-       i < static_cast<int>(this->sparse_matrix.rowBlockIndices().size()); ++i)
+  for (int i = 0; i < static_cast<int>(this->sparse_matrix.rowBlockIndices().size()); ++i)
     blockIndices.emplace_back(std::make_pair(i, i));
 
-  bool state = this->linearsolver->solvePattern(spinv, blockIndices,
-                                                this->sparse_matrix);
+  bool state = this->linearsolver->solvePattern(spinv, blockIndices, this->sparse_matrix);
   ASSERT_TRUE(!state || spinv.rowBlockIndices().size() == blockIndices.size());
-  if (!state) {  // solver does not implement solving for a pattern return in
-                 // this case
+  if (!state) {  // solver does not implement solving for a pattern return in this case
     std::cerr << "Solver does not support solvePattern()" << std::endl;
     SUCCEED();
     return;
@@ -108,8 +102,7 @@ TYPED_TEST_P(LS, SolvePattern) {
     int numRows = spinv.rowsOfBlock(idx.first);
     int numCols = spinv.colsOfBlock(idx.second);
 
-    g2o::MatrixX expected =
-        this->matrix_inverse.block(rr, cc, numRows, numCols);
+    g2o::MatrixX expected = this->matrix_inverse.block(rr, cc, numRows, numCols);
     g2o::MatrixX actual = *spinv.block(idx.first, idx.second);
 
     EXPECT_TRUE(actual.isApprox(expected, 1e-6))
@@ -123,8 +116,7 @@ TYPED_TEST_P(LS, SolveBlocks) {
   number_t** blocks = nullptr;
   bool state = this->linearsolver->solveBlocks(blocks, this->sparse_matrix);
   ASSERT_TRUE(!state || blocks != nullptr);
-  if (!state) {  // solver does not implement solving for a pattern return in
-                 // this case
+  if (!state) {  // solver does not implement solving for a pattern return in this case
     std::cerr << "Solver does not support solveBlocks()" << std::endl;
     SUCCEED();
     return;
@@ -136,12 +128,10 @@ TYPED_TEST_P(LS, SolveBlocks) {
     int numRows = this->sparse_matrix.rowsOfBlock(i);
     int numCols = this->sparse_matrix.colsOfBlock(i);
 
-    g2o::MatrixX expected =
-        this->matrix_inverse.block(rr, cc, numRows, numCols);
+    g2o::MatrixX expected = this->matrix_inverse.block(rr, cc, numRows, numCols);
     g2o::MatrixX::MapType actual(blocks[i], numRows, numCols);
 
-    EXPECT_TRUE(actual.isApprox(expected, 1e-6))
-        << "block " << i << " " << i << " differs";
+    EXPECT_TRUE(actual.isApprox(expected, 1e-6)) << "block " << i << " " << i << " differs";
   }
   TypeParam::first_type::deallocateBlocks(this->sparse_matrix, blocks);
 }

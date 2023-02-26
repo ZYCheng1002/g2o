@@ -23,12 +23,8 @@ if (APPLE)
 endif()
 target_link_libraries(types_slam3d_addons types_slam3d core)
 if(G2O_HAVE_OPENGL)
-  target_link_libraries(types_slam3d_addons opengl_helper)
+  target_link_libraries(types_slam3d_addons ${OPENGL_gl_LIBRARY} )
 endif()
-
-target_include_directories(types_slam3d_addons PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-  $<INSTALL_INTERFACE:include/g2o/types/slam3d_addons>)
 
 install(TARGETS types_slam3d_addons
   EXPORT ${G2O_TARGETS_EXPORT_NAME}

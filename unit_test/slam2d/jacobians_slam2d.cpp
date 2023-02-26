@@ -24,27 +24,33 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "g2o/stuff/os_specific.h"
+#include "gtest/gtest.h"
+
+#include "unit_test/test_helper/evaluate_jacobian.h"
+
 #include "g2o/types/slam2d/edge_pointxy.h"
 #include "g2o/types/slam2d/edge_se2.h"
 #include "g2o/types/slam2d/edge_se2_pointxy.h"
 #include "g2o/types/slam2d/edge_se2_pointxy_bearing.h"
 #include "g2o/types/slam2d/edge_se2_prior.h"
-#include "gtest/gtest.h"
-#include "unit_test/test_helper/evaluate_jacobian.h"
+#include "g2o/stuff/os_specific.h"
 
 using namespace std;
 using namespace g2o;
 using namespace Eigen;
 
-static SE2 randomSE2() { return SE2(Vector3d::Random()); }
+static SE2 randomSE2()
+{
+  return SE2(Vector3d::Random());
+}
 
-TEST(Slam2D, EdgeSE2Jacobian) {
+TEST(Slam2D, EdgeSE2Jacobian)
+{
   VertexSE2 v1;
-  v1.setId(0);
+  v1.setId(0); 
 
   VertexSE2 v2;
-  v2.setId(1);
+  v2.setId(1); 
 
   EdgeSE2 e;
   e.setVertex(0, &v1);
@@ -65,9 +71,10 @@ TEST(Slam2D, EdgeSE2Jacobian) {
   }
 }
 
-TEST(Slam2D, EdgeSE2PriorJacobian) {
+TEST(Slam2D, EdgeSE2PriorJacobian)
+{
   VertexSE2 v1;
-  v1.setId(0);
+  v1.setId(0); 
 
   EdgeSE2Prior e;
   e.setVertex(0, &v1);
@@ -86,12 +93,13 @@ TEST(Slam2D, EdgeSE2PriorJacobian) {
   }
 }
 
-TEST(Slam2D, EdgePointXYJacobian) {
+TEST(Slam2D, EdgePointXYJacobian)
+{
   VertexPointXY v1;
-  v1.setId(0);
+  v1.setId(0); 
 
   VertexPointXY v2;
-  v2.setId(1);
+  v2.setId(1); 
 
   EdgePointXY e;
   e.setVertex(0, &v1);
@@ -112,12 +120,13 @@ TEST(Slam2D, EdgePointXYJacobian) {
   }
 }
 
-TEST(Slam2D, EdgeSE2PointXYJacobian) {
+TEST(Slam2D, EdgeSE2PointXYJacobian)
+{
   VertexSE2 v1;
-  v1.setId(0);
+  v1.setId(0); 
 
   VertexPointXY v2;
-  v2.setId(1);
+  v2.setId(1); 
 
   EdgeSE2PointXY e;
   e.setVertex(0, &v1);
@@ -138,12 +147,13 @@ TEST(Slam2D, EdgeSE2PointXYJacobian) {
   }
 }
 
-TEST(Slam2D, EdgeSE2PointXYBearingJacobian) {
+TEST(Slam2D, EdgeSE2PointXYBearingJacobian)
+{
   VertexSE2 v1;
-  v1.setId(0);
+  v1.setId(0); 
 
   VertexPointXY v2;
-  v2.setId(1);
+  v2.setId(1); 
 
   EdgeSE2PointXYBearing e;
   e.setVertex(0, &v1);

@@ -24,31 +24,25 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "edge_types_cost_function.h"
-
 #include <limits>
-
 #include "g2o/core/factory.h"
+#include "edge_types_cost_function.h"
 
 namespace g2o {
 
-EdgeTypesCostFunction::EdgeTypesCostFunction(const std::string& edgeTag,
-                                             const std::string& vertexTag,
-                                             int level)
-    : _edgeTag(edgeTag),
-      _vertexTag(vertexTag),
-      _factory(Factory::instance()),
-      _level(level) {}
+  EdgeTypesCostFunction::EdgeTypesCostFunction(const std::string& edgeTag, const std::string& vertexTag, int level):
+    _edgeTag(edgeTag),
+    _vertexTag(vertexTag),
+    _factory(Factory::instance()),
+    _level(level)
+  {}
 
-double EdgeTypesCostFunction::operator()(HyperGraph::Edge* e_,
-                                         HyperGraph::Vertex* from,
-                                         HyperGraph::Vertex* to) {
-  OptimizableGraph::Edge* e = (OptimizableGraph::Edge*)(e_);
-  if (e->level() == _level && _factory->tag(e) == _edgeTag &&
-      _factory->tag(from) == _vertexTag && _factory->tag(to) == _vertexTag) {
-    return 1.;
+  double EdgeTypesCostFunction::operator() (HyperGraph::Edge* e_, HyperGraph::Vertex* from, HyperGraph::Vertex* to){
+    OptimizableGraph::Edge*e =(OptimizableGraph::Edge*)(e_);
+    if (e->level()==_level && _factory->tag(e)==_edgeTag && _factory->tag(from)==_vertexTag && _factory->tag(to)==_vertexTag) {
+      return 1.;
+    }
+    return std::numeric_limits<double>::max();
   }
-  return std::numeric_limits<double>::max();
-}
 
-}  // namespace g2o
+}

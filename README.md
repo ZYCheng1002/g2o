@@ -1,9 +1,8 @@
 # g2o - General Graph Optimization
 
-Linux/Mac: [![CI](https://github.com/RainerKuemmerle/g2o/actions/workflows/ci.yml/badge.svg?event=push)](https://github.com/RainerKuemmerle/g2o/actions/workflows/ci.yml)
-Windows: [![win64](https://github.com/RainerKuemmerle/g2o/actions/workflows/windows.yml/badge.svg?event=push)](https://github.com/RainerKuemmerle/g2o/actions/workflows/windows.yml)
-Windows (AppVeyor): [![Build status](https://ci.appveyor.com/api/projects/status/9w0cpb9krc6t4nt7/branch/master?svg=true)](https://ci.appveyor.com/project/RainerKuemmerle/g2o/branch/master)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/280c5eed95ed4059ad5d003d59e72704)](https://www.codacy.com/gh/RainerKuemmerle/g2o/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=RainerKuemmerle/g2o&amp;utm_campaign=Badge_Grade)
+Linux: [![Build Status](https://travis-ci.org/RainerKuemmerle/g2o.svg?branch=master)](https://travis-ci.org/RainerKuemmerle/g2o)
+Windows: [![Build status](https://ci.appveyor.com/api/projects/status/9w0cpb9krc6t4nt7/branch/master?svg=true)](https://ci.appveyor.com/project/RainerKuemmerle/g2o/branch/master)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e87df92948b747d58591372dd425fc59)](https://app.codacy.com/manual/rainer.kuemmerle/g2o?utm_source=github.com&utm_medium=referral&utm_content=RainerKuemmerle/g2o&utm_campaign=Badge_Grade_Dashboard)
 
 g2o is an open-source C++ framework for optimizing graph-based nonlinear error
 functions. g2o has been designed to be easily extensible to a wide range of
@@ -23,10 +22,6 @@ specified in a few lines of code. The current implementation provides solutions
 to several variants of SLAM and BA. g2o offers a performance comparable to
 implementations of state-of-the-art approaches for the specific problems
 (02/2011).
-
-## Python and updated memory management
-The branch [pymem](https://github.com/RainerKuemmerle/g2o/tree/pymem) contains a python wrapper and switches to smart pointer instead of RAW pointers.
-It is currently experimental but PRs and improvements are welcome - as always.
 
 ## Papers Describing the Approach
 
@@ -62,10 +57,10 @@ library distributed with, for example, Ubuntu or Debian includes the GPL
 features. The supernodal factorization is considered by g2o, if it is
 available.
 
-Within the folder g2o/EXTERNAL we include software not written by us to
+Within the folder EXTERNAL we include software not written by us to
 guarantee easy compilation.
 
--   ceres: BSD (see g2o/EXTERNAL/ceres/LICENSE)
+-   ceres: BSD (see EXTERNAL/ceres/LICENSE)
     Headers to perform Automatic Differentiation
 
 -   freeglut: X Consortium (Copyright (c) 1999-2000 Pawel W. Olszta)
@@ -80,7 +75,6 @@ licenses for more details.
 
 ## Requirements
 
--   C++14 compiler (CI pipeline runs with gcc, clang and MSVC)
 -   cmake             <http://www.cmake.org>
 -   Eigen3            <http://eigen.tuxfamily.org>
 
@@ -116,7 +110,7 @@ will install g2o together with its required dependencies. In this case no manual
 
 If using [vcpkg](https://github.com/Microsoft/vcpkg), then
 
-`script\install-deps-windows.bat`
+`scripts\install-deps-windows.bat`
 
 will build and install the required dependencies. The location of `vcpkg` and required triplet are determined by the environment variables `VCPKG_ROOT_DIR` and `VCPKG_DEFAULT_TRIPLET`.
 
@@ -135,18 +129,14 @@ by the following command sequence.
 The binaries will be placed in bin and the libraries in lib which
 are both located in the top-level folder.
 
-On Windows with `vcpkg` the following two commands will generate build scripts for Visual Studio 2017 MSVC 15 tool set (please change the Visual Studio version number in accordance with your system):
+On Windows with `vcpkg` the following two commands will generate build scripts for Visual Studio 2017 MSVC 14 tool set:
 
 -   `mkdir build`
 -   `cd build`
--   `cmake -G "Visual Studio 15 2017 Win64" -DG2O_BUILD_APPS=ON -DG2O_BUILD_EXAMPLES=ON -DVCPKG_TARGET_TRIPLET="%VCPKG_DEFAULT_TRIPLET%" -DCMAKE_TOOLCHAIN_FILE="%VCPKG_ROOT_DIR%\scripts\buildsystems\vcpkg.cmake" ..`
+-   `cmake -G "Visual Studio 14 2017 Win64" -DG2O_BUILD_APPS=ON -DG2O_BUILD_EXAMPLES=ON -DVCPKG_TARGET_TRIPLET="%VCPKG_DEFAULT_TRIPLET%" -DCMAKE_TOOLCHAIN_FILE="%VCPKG_ROOT_DIR%\scripts\buildsystems\vcpkg.cmake" ..`
 
 If you are compiling on Windows and you are for some reasons **not** using `vcpkg` please download Eigen3 and extract it.
-Within cmake-gui set the variable EIGEN3_INCLUDE_DIR to that directory.
-
--   `mkdir build`
--   `cd build`
--   `cmake .. -G "Visual Studio 15 2017 Win64" -DG2O_BUILD_APPS=ON -DG2O_BUILD_EXAMPLES=ON -DEIGEN3_INCLUDE_DIR="<THE_PATH_WHERE_YOU_PLACED_EIGEN3_AND_THE_EIGEN3_CMakeLists.txt>"
+Within cmake-gui set the variable G2O_EIGEN3_INCLUDE to that directory.
 
 ## Cross-Compiling for Android
 

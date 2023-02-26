@@ -2,13 +2,12 @@ add_library(core ${G2O_LIB_TYPE}
 dynamic_aligned_buffer.hpp
 ownership.h
 base_edge.h
-base_multi_edge.h
-base_fixed_sized_edge.h        hyper_graph_action.cpp
-base_fixed_sized_edge.hpp      hyper_graph_action.h
-base_variable_sized_edge.h     hyper_graph.cpp
-base_variable_sized_edge.hpp   hyper_graph.h
+base_binary_edge.h          hyper_graph_action.cpp
+base_binary_edge.hpp        hyper_graph_action.h
+base_multi_edge.h           hyper_graph.cpp
+base_multi_edge.hpp         hyper_graph.h
 base_unary_edge.h           linear_solver.h
-base_binary_edge.h          marginal_covariance_cholesky.cpp
+base_unary_edge.hpp         marginal_covariance_cholesky.cpp
 base_vertex.h               marginal_covariance_cholesky.h
 base_vertex.hpp             matrix_structure.cpp
 batch_stats.cpp             matrix_structure.h
@@ -41,21 +40,8 @@ io_helper.h
 g2o_core_api.h
 )
 
-target_include_directories(core PUBLIC
-  "$<BUILD_INTERFACE:${g2o_SOURCE_DIR};${PROJECT_BINARY_DIR}>"
-  $<INSTALL_INTERFACE:include/g2o/core>
-)
-
 set_target_properties(core PROPERTIES OUTPUT_NAME ${LIB_PREFIX}core)
 target_link_libraries(core PUBLIC stuff ${G2O_EIGEN3_EIGEN_TARGET})
-if(G2O_USE_VENDORED_CERES)
-  target_compile_definitions(core PUBLIC "G2O_USE_VENDORED_CERES")
-  target_link_libraries(core PUBLIC g2o_ceres_ad)
-else()
-  find_package(Ceres REQUIRED)
-  target_link_libraries(core PUBLIC ceres)
-endif()
-target_compile_features(core PUBLIC cxx_std_14)
 
 if (APPLE)
   set_target_properties(core PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")

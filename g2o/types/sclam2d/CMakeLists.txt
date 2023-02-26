@@ -13,12 +13,8 @@ if (APPLE)
 endif()
 target_link_libraries(types_sclam2d types_slam2d core)
 if(G2O_HAVE_OPENGL)
-  target_link_libraries(types_sclam2d opengl_helper)
+  target_link_libraries(types_sclam2d ${OPENGL_gl_LIBRARY})
 endif()
-
-target_include_directories(types_sclam2d PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-  $<INSTALL_INTERFACE:include/g2o/types/sclam2d>)
 
 install(TARGETS types_sclam2d
   EXPORT ${G2O_TARGETS_EXPORT_NAME}
